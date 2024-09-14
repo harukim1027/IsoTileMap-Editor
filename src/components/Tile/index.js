@@ -17,13 +17,11 @@ const Tile = ({ tile, renderOrder }) => {
 
   if (tile.name === "tile1") {
     rotation = [0, 0, 0];
-
     texture.wrapS = texture.wrapT = RepeatWrapping;
-  } else if (
-    tile.name === "tile2" ||
-    tile.name === "tile3" ||
-    tile.name === "tile4"
-  ) {
+  } else if (tile.name === "tile4") {
+    geometryArgs = [1, 2];
+    texture.wrapS = texture.wrapT = ClampToEdgeWrapping;
+  } else if (tile.name === "tile2" || tile.name === "tile3") {
     texture.wrapS = texture.wrapT = ClampToEdgeWrapping;
   }
 

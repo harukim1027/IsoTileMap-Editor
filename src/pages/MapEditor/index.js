@@ -17,8 +17,8 @@ const MapEditor = () => {
   const [dragStart, setDragStart] = useState(null);
   const [dragEnd, setDragEnd] = useState(null);
   const [cameraRotation, setCameraRotation] = useState({
-    x: -Math.PI / 4,
-    y: Math.PI / 4,
+    x: -Math.PI / 18,
+    y: Math.PI / 9,
   });
   const [clickStart, setClickStart] = useState(null);
   const [clickPosition, setClickPosition] = useState(null);
@@ -174,7 +174,7 @@ const MapEditor = () => {
           onPointerUp={handlePlaneUp}>
           <OrthographicCamera
             makeDefault
-            position={[10, 10, 10]}
+            position={[6, 5, 10]}
             zoom={50}
             rotation={[cameraRotation?.x, cameraRotation?.y, 0]}
           />
