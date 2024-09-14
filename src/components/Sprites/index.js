@@ -48,21 +48,33 @@ const Sprites = ({ onTileSelect }) => {
     }
   };
 
+  const handleWrapperClick = () => {
+    document.getElementById("fileUpload").click();
+  };
+
   return (
-    <div>
-      <input type="file" accept="image/*" onChange={handleImageUpload} />
-      <SpriteGrid>
-        {tileImages.map((tile, index) => (
-          <SpriteWrapper
-            key={index}
-            onClick={() => onTileSelect(tile)}
-            onDragStart={(e) => handleDragStart(e, tile)}
-            draggable="true">
-            <SpriteImage src={tile.src} alt={tile.name} />
-          </SpriteWrapper>
-        ))}
-      </SpriteGrid>
-    </div>
+    <SpriteGrid>
+      <SpriteWrapper onClick={handleWrapperClick}>
+        <input
+          type="file"
+          accept="image/*"
+          style={{ display: "none" }}
+          id="fileUpload"
+          onChange={handleImageUpload}
+        />
+        <div style={{ cursor: "pointer", color: "#fff", fontSize: 30 }}>+</div>
+      </SpriteWrapper>
+
+      {tileImages.map((tile, index) => (
+        <SpriteWrapper
+          key={index}
+          onClick={() => onTileSelect(tile)}
+          onDragStart={(e) => handleDragStart(e, tile)}
+          draggable="true">
+          <SpriteImage src={tile.src} alt={tile.name} />
+        </SpriteWrapper>
+      ))}
+    </SpriteGrid>
   );
 };
 
