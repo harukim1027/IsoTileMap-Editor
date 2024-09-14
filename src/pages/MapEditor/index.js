@@ -162,26 +162,38 @@ const MapEditor = () => {
     };
 
     const DragSelection = () => {
-      if (!dragStart || !dragEnd || !isDragging) return null;
+      if (!dragStart || !dragEnd || !isDragging || !selectedTile) return null;
 
       const xMin = Math.min(dragStart.x, dragEnd.x);
       const xMax = Math.max(dragStart.x, dragEnd.x);
       const zMin = Math.min(dragStart.z, dragEnd.z);
       const zMax = Math.max(dragStart.z, dragEnd.z);
 
-      const width = xMax - xMin + 1;
-      const depth = zMax - zMin + 1;
+      let selectionTiles = [];
+      for (let x = xMin; x <= xMax; x++) {
+        for (let z = zMin; z <= zMax; z++) {
+          selectionTiles.push(
+            <Tile
+              key={`${x}-${z}`}
+              tile={{
+                ...selectedTile,
+                position: [
+                  x,
+                  selectedTile?.name === "tile1"
+                    ? 0
+                    : selectedTile?.name === "tile4"
+                    ? 1
+                    : 0.01,
+                  z,
+                ],
+              }}
+              opacity={0.5}
+            />
+          );
+        }
+      }
 
-      return (
-        <mesh position={[(xMin + xMax) / 2, 0.01, (zMin + zMax) / 2]}>
-          <boxGeometry args={[width, 0.01, depth]} />
-          <meshBasicMaterial
-            color="lightblue"
-            transparent={true}
-            opacity={0.5}
-          />
-        </mesh>
-      );
+      return <>{selectionTiles}</>;
     };
 
     return (
@@ -205,7 +217,7 @@ const MapEditor = () => {
         {tiles.map((tile, index) => (
           <Tile key={index} tile={tile} renderOrder={index + 1} />
         ))}
-        <DragSelection />
+        <DragSelection /> {/* 드래그 중인 타일 표시 */}
       </>
     );
   };
