@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { Canvas } from "@react-three/fiber";
+import React, { useState, useEffect, useRef } from "react";
+import { Canvas, useThree } from "@react-three/fiber";
 import { OrthographicCamera } from "@react-three/drei";
-import { GridHelper } from "three";
+import { GridHelper, Raycaster, Vector2, Vector3, Plane } from "three";
 import Tile from "../../components/Tile";
 import {
   EditorContainer,
@@ -58,104 +58,155 @@ const MapEditor = () => {
     };
   }, []);
 
-  const handlePlaneDown = (e) => {
-    if (!selectedTile) {
-      console.warn("타일이 선택되지 않았습니다.");
-      return;
-    }
+  const MapCanvas = () => {
+    const { camera, size, gl } = useThree();
+    const raycaster = new Raycaster();
+    const mouse = new Vector2();
 
-    const { point } = e;
-    setClickStart(Date.now());
-    setIsDragging(false);
-    setDragStart({
-      x: Math.floor(point?.x * 10) / 10 + 0.5,
-      z: Math.floor(point?.z * 10) / 10 + 0.5,
-    });
-    setDragEnd(null);
-    setClickPosition({
-      x: Math.floor(point?.x * 10) / 10 + 0.5,
-      z: Math.floor(point?.z * 10) / 10 + 0.5,
-    });
-  };
+    const getClickPositionOnPlane = (e) => {
+      const canvas = gl.domElement;
+      const rect = canvas.getBoundingClientRect();
 
-  const handlePlaneMove = (e) => {
-    if (!dragStart || !selectedTile) return;
-    const { point } = e;
-    const newDragEnd = {
-      x: Math.floor(point?.x * 10) / 10 + 0.5,
-      z: Math.floor(point?.z * 10) / 10 + 0.5,
+      mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+
+      const plane = new Plane(new Vector3(0, 1, 0), 0);
+      raycaster.setFromCamera(mouse, camera);
+
+      const point = new Vector3();
+      raycaster.ray.intersectPlane(plane, point);
+
+      return point;
     };
 
-    setDragEnd(newDragEnd);
-
-    const dragDistanceX = Math.abs(newDragEnd?.x - dragStart?.x);
-    const dragDistanceZ = Math.abs(newDragEnd?.z - dragStart?.z);
-
-    if (dragDistanceX > 0.2 || dragDistanceZ > 0.2) {
-      setIsDragging(true);
-    }
-  };
-
-  const handlePlaneUp = (e) => {
-    const clickDuration = Date.now() - clickStart;
-
-    if (clickDuration < 200 && !isDragging && clickPosition) {
-      const zPosition =
-        selectedTile?.name === "tile1"
-          ? 0
-          : selectedTile?.name === "tile4"
-          ? 1
-          : 0.01;
-      const newTile = {
-        ...selectedTile,
-        position: [clickPosition?.x, zPosition, clickPosition?.z],
-      };
-      setTiles([...tiles, newTile]);
-    } else if (dragStart && dragEnd && isDragging) {
-      const xMin = Math.min(dragStart?.x, dragEnd?.x);
-      const xMax = Math.max(dragStart?.x, dragEnd?.x);
-      const zMin = Math.min(dragStart?.z, dragEnd?.z);
-      const zMax = Math.max(dragStart?.z, dragEnd?.z);
-
-      let newTiles = [];
-      for (let x = xMin; x <= xMax; x++) {
-        for (let z = zMin; z <= zMax; z++) {
-          const zPosition =
-            selectedTile?.name === "tile1"
-              ? 0
-              : selectedTile?.name === "tile4"
-              ? 1
-              : 0.01;
-          newTiles.push({
-            ...selectedTile,
-            position: [x, zPosition, z],
-          });
-        }
+    const handlePlaneDown = (e) => {
+      if (!selectedTile) {
+        console.warn("타일이 선택되지 않았습니다.");
+        return;
       }
-      setTiles([...tiles, ...newTiles]);
-    }
 
-    setIsDragging(false);
-    setDragStart(null);
-    setDragEnd(null);
-  };
+      const point = getClickPositionOnPlane(e);
 
-  const DragSelection = () => {
-    if (!dragStart || !dragEnd || !isDragging) return null;
+      setClickStart(Date.now());
+      setIsDragging(false);
 
-    const xMin = Math.min(dragStart?.x, dragEnd?.x);
-    const xMax = Math.max(dragStart?.x, dragEnd?.x);
-    const zMin = Math.min(dragStart?.z, dragEnd?.z);
-    const zMax = Math.max(dragStart?.z, dragEnd?.z);
+      const snappedX = Math.floor(point.x);
+      const snappedZ = Math.floor(point.z);
 
-    const width = xMax - xMin + 1;
-    const depth = zMax - zMin + 1;
+      setDragStart({ x: snappedX, z: snappedZ });
+      setDragEnd(null);
+      setClickPosition({ x: snappedX, z: snappedZ });
+    };
+
+    const handlePlaneMove = (e) => {
+      if (!dragStart || !selectedTile) return;
+      const point = getClickPositionOnPlane(e);
+
+      const newDragEnd = {
+        x: Math.floor(point.x),
+        z: Math.floor(point.z),
+      };
+
+      setDragEnd(newDragEnd);
+
+      const dragDistanceX = Math.abs(newDragEnd.x - dragStart.x);
+      const dragDistanceZ = Math.abs(newDragEnd.z - dragStart.z);
+
+      if (dragDistanceX > 0.2 || dragDistanceZ > 0.2) {
+        setIsDragging(true);
+      }
+    };
+
+    const handlePlaneUp = () => {
+      const clickDuration = Date.now() - clickStart;
+
+      if (clickDuration < 200 && !isDragging && clickPosition) {
+        const zPosition =
+          selectedTile?.name === "tile1"
+            ? 0
+            : selectedTile?.name === "tile4"
+            ? 1
+            : 0.01;
+        const newTile = {
+          ...selectedTile,
+          position: [clickPosition?.x, zPosition, clickPosition?.z],
+        };
+        setTiles([...tiles, newTile]);
+      } else if (dragStart && dragEnd && isDragging) {
+        const xMin = Math.min(dragStart.x, dragEnd.x);
+        const xMax = Math.max(dragStart.x, dragEnd.x);
+        const zMin = Math.min(dragStart.z, dragEnd.z);
+        const zMax = Math.max(dragStart.z, dragEnd.z);
+
+        let newTiles = [];
+        for (let x = xMin; x <= xMax; x++) {
+          for (let z = zMin; z <= zMax; z++) {
+            const zPosition =
+              selectedTile?.name === "tile1"
+                ? 0
+                : selectedTile?.name === "tile4"
+                ? 1
+                : 0.01;
+            newTiles.push({
+              ...selectedTile,
+              position: [x, zPosition, z],
+            });
+          }
+        }
+        setTiles([...tiles, ...newTiles]);
+      }
+
+      setIsDragging(false);
+      setDragStart(null);
+      setDragEnd(null);
+    };
+
+    const DragSelection = () => {
+      if (!dragStart || !dragEnd || !isDragging) return null;
+
+      const xMin = Math.min(dragStart.x, dragEnd.x);
+      const xMax = Math.max(dragStart.x, dragEnd.x);
+      const zMin = Math.min(dragStart.z, dragEnd.z);
+      const zMax = Math.max(dragStart.z, dragEnd.z);
+
+      const width = xMax - xMin + 1;
+      const depth = zMax - zMin + 1;
+
+      return (
+        <mesh position={[(xMin + xMax) / 2, 0.01, (zMin + zMax) / 2]}>
+          <boxGeometry args={[width, 0.01, depth]} />
+          <meshBasicMaterial
+            color="lightblue"
+            transparent={true}
+            opacity={0.5}
+          />
+        </mesh>
+      );
+    };
 
     return (
-      <mesh position={[(xMin + xMax) / 2, 0.01, (zMin + zMax) / 2]}>
-        <boxGeometry args={[width, 0.01, depth]} />
-        <meshBasicMaterial color="lightblue" transparent={true} opacity={0.5} />
-      </mesh>
+      <>
+        <OrthographicCamera
+          makeDefault
+          position={[6, 5, 10]}
+          zoom={50}
+          rotation={[cameraRotation?.x, cameraRotation?.y, 0]}
+        />
+        <primitive object={new GridHelper(100, 100)} />
+        <mesh
+          position={[0, 0, 0]}
+          rotation={[-Math.PI / 2, 0, 0]}
+          onPointerDown={handlePlaneDown}
+          onPointerMove={handlePlaneMove}
+          onPointerUp={handlePlaneUp}>
+          <planeGeometry args={[100, 100]} />
+          <meshBasicMaterial visible={false} />
+        </mesh>
+        {tiles.map((tile, index) => (
+          <Tile key={index} tile={tile} renderOrder={index + 1} />
+        ))}
+        <DragSelection />
+      </>
     );
   };
 
@@ -166,33 +217,8 @@ const MapEditor = () => {
       </SpritesSection>
 
       <MapEditorSection>
-        <Canvas
-          style={{ background: "black" }}
-          onPointerMissed={() => {
-            console.log("3D 객체를 클릭하지 않았습니다.");
-          }}
-          onPointerUp={handlePlaneUp}>
-          <OrthographicCamera
-            makeDefault
-            position={[6, 5, 10]}
-            zoom={50}
-            rotation={[cameraRotation?.x, cameraRotation?.y, 0]}
-          />
-          <primitive object={new GridHelper(20, 20)} />
-          <mesh
-            position={[0, 0, 0]}
-            rotation={[-Math.PI / 2, 0, 0]}
-            onPointerDown={handlePlaneDown}
-            onPointerMove={handlePlaneMove}>
-            <planeGeometry args={[100, 100]} />
-            <meshBasicMaterial visible={false} />
-          </mesh>
-
-          <DragSelection />
-
-          {tiles.map((tile, index) => (
-            <Tile key={index} tile={tile} />
-          ))}
+        <Canvas style={{ background: "black" }}>
+          <MapCanvas />
         </Canvas>
       </MapEditorSection>
     </EditorContainer>

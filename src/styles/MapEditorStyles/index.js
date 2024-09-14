@@ -3,23 +3,23 @@ import styled from "styled-components";
 export const EditorContainer = styled.div`
   display: flex;
   height: 100vh;
-  background-color: #f4f4f9;
+  background-color: #000000;
 `;
 
 export const SpritesSection = styled.div`
-  width: 20%;
-  background-color: #f0f0f0;
+  width: 40%;
+  background-color: #000000;
   padding: 0px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: flex-start;
-  align-items: center;
-  border-right: 2px solid #ccc;
+  align-items: flex-start;
+  box-shadow: 3px 0px 10px rgba(0, 0, 0, 1); /* 오른쪽에 그림자 추가 */
 `;
 
 export const MapEditorSection = styled.div`
   width: 100%;
   padding: 0px;
-  background-color: #ffffff;
+  background-color: #000000;
   display: flex;
 `;
