@@ -9,7 +9,7 @@ export const EditorContainer = styled.div`
 export const SpritesSection = styled.div`
   width: 20%;
   background-color: #f0f0f0;
-  padding: 20px;
+  padding: 0px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -18,11 +18,8 @@ export const SpritesSection = styled.div`
 `;
 
 export const MapEditorSection = styled.div`
-  width: 80%;
-  padding: 20px;
+  width: 100%;
+  padding: 0px;
   background-color: #ffffff;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
 `;

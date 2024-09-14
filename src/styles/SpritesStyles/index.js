@@ -8,8 +8,6 @@ export const SpriteGrid = styled.div`
 `;
 
 export const SpriteImage = styled.img`
-  width: 50px;
-  height: 50px;
   cursor: pointer;
   &:hover {
     transform: scale(1.1);
