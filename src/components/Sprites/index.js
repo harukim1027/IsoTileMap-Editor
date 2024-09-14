@@ -14,12 +14,6 @@ const tileImages = [
   { src: tile2, name: "tile2" },
   { src: tile3, name: "tile3" },
   { src: tile4, name: "tile4" },
-  { src: tile1, name: "tile1" },
-  { src: tile2, name: "tile2" },
-  { src: tile3, name: "tile3" },
-  { src: tile4, name: "tile4" },
-  { src: tile3, name: "tile3" },
-  { src: tile4, name: "tile4" },
 ];
 
 const Sprites = ({ onTileSelect }) => {

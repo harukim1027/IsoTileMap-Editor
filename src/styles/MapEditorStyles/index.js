@@ -7,14 +7,14 @@ export const EditorContainer = styled.div`
 `;
 
 export const SpritesSection = styled.div`
-  width: 40%;
+  width: 30%;
   background-color: #000000;
   padding: 0px;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   align-items: flex-start;
-  box-shadow: 3px 0px 10px rgba(0, 0, 0, 1); /* 오른쪽에 그림자 추가 */
+  box-shadow: 3px 0px 10px rgba(0, 0, 0, 1);
 `;
 
 export const MapEditorSection = styled.div`
