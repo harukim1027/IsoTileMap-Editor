@@ -7,13 +7,18 @@ import { SpriteGrid, SpriteImage } from "../../styles/SpritesStyles";
 
 const tileImages = [tile1, tile2, tile3, tile4];
 
-const Sprites = () => {
+const Sprites = ({ onTileSelect }) => {
   return (
     <div>
       <h3>Sprites</h3>
       <SpriteGrid>
         {tileImages.map((src, index) => (
-          <SpriteImage key={index} src={src} alt={`Tile ${index + 1}`} />
+          <SpriteImage
+            key={index}
+            src={src}
+            alt={`Tile ${index + 1}`}
+            onClick={() => onTileSelect(src)}
+          />
         ))}
       </SpriteGrid>
     </div>
