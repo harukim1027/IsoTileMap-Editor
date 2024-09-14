@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import tile1 from "../../assets/sources/plains-sliced_21.png";
 import tile2 from "../../assets/sources/plains-sliced_42.png";
 import tile3 from "../../assets/sources/plains-sliced_45.png";
@@ -9,7 +9,7 @@ import {
   SpriteImage,
 } from "../../styles/SpritesStyles";
 
-const tileImages = [
+const defaultTileImages = [
   { src: tile1, name: "tile1" },
   { src: tile2, name: "tile2" },
   { src: tile3, name: "tile3" },
@@ -17,13 +17,40 @@ const tileImages = [
 ];
 
 const Sprites = ({ onTileSelect }) => {
+  const [tileImages, setTileImages] = useState(defaultTileImages);
+
+  useEffect(() => {
+    const savedTiles = JSON.parse(localStorage.getItem("userTiles")) || [];
+    if (savedTiles.length) {
+      setTileImages([...defaultTileImages, ...savedTiles]);
+    }
+  }, []);
+
   const handleDragStart = (e, tile) => {
     e.dataTransfer.setData("tileImage", tile.src);
     onTileSelect(tile);
   };
 
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      const newTile = { src: reader.result, name: `userTile-${Date.now()}` };
+
+      const updatedTiles = [...tileImages, newTile];
+      setTileImages(updatedTiles);
+      localStorage.setItem("userTiles", JSON.stringify(updatedTiles));
+    };
+
+    if (file) {
+      reader.readAsDataURL(file);
+    }
+  };
+
   return (
     <div>
+      <input type="file" accept="image/*" onChange={handleImageUpload} />
       <SpriteGrid>
         {tileImages.map((tile, index) => (
           <SpriteWrapper
