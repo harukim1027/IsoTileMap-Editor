@@ -7,6 +7,8 @@ import {
   SpriteGrid,
   SpriteWrapper,
   SpriteImage,
+  SelectedTileContainer,
+  SelectedTileContainerWrapper,
 } from "../../styles/SpritesStyles";
 
 const defaultTileImages = [
@@ -18,6 +20,7 @@ const defaultTileImages = [
 
 const Sprites = ({ onTileSelect }) => {
   const [tileImages, setTileImages] = useState(defaultTileImages);
+  const [selectedTile, setSelectedTile] = useState(null);
 
   useEffect(() => {
     const savedTiles = JSON.parse(localStorage.getItem("userTiles")) || [];
@@ -28,6 +31,7 @@ const Sprites = ({ onTileSelect }) => {
 
   const handleDragStart = (e, tile) => {
     e.dataTransfer.setData("tileImage", tile.src);
+    setSelectedTile(tile);
     onTileSelect(tile);
   };
 
@@ -53,28 +57,49 @@ const Sprites = ({ onTileSelect }) => {
   };
 
   return (
-    <SpriteGrid>
-      <SpriteWrapper onClick={handleWrapperClick}>
-        <input
-          type="file"
-          accept="image/*"
-          style={{ display: "none" }}
-          id="fileUpload"
-          onChange={handleImageUpload}
-        />
-        <div style={{ cursor: "pointer", color: "#fff", fontSize: 30 }}>+</div>
-      </SpriteWrapper>
+    <div>
+      <SelectedTileContainer>
+        <h3>선택된 타일</h3>
 
-      {tileImages.map((tile, index) => (
-        <SpriteWrapper
-          key={index}
-          onClick={() => onTileSelect(tile)}
-          onDragStart={(e) => handleDragStart(e, tile)}
-          draggable="true">
-          <SpriteImage src={tile.src} alt={tile.name} />
+        {selectedTile ? (
+          <SelectedTileContainerWrapper>
+            <SpriteImage src={selectedTile.src} alt={selectedTile.name} />
+          </SelectedTileContainerWrapper>
+        ) : (
+          <SelectedTileContainerWrapper>
+            타일을 선택하세요
+          </SelectedTileContainerWrapper>
+        )}
+      </SelectedTileContainer>
+      <hr />
+      <SpriteGrid>
+        <SpriteWrapper onClick={handleWrapperClick}>
+          <input
+            type="file"
+            accept="image/*"
+            style={{ display: "none" }}
+            id="fileUpload"
+            onChange={handleImageUpload}
+          />
+          <div style={{ cursor: "pointer", color: "#fff", fontSize: 30 }}>
+            +
+          </div>
         </SpriteWrapper>
-      ))}
-    </SpriteGrid>
+
+        {tileImages.map((tile, index) => (
+          <SpriteWrapper
+            key={index}
+            onClick={() => {
+              setSelectedTile(tile);
+              onTileSelect(tile);
+            }}
+            onDragStart={(e) => handleDragStart(e, tile)}
+            draggable="true">
+            <SpriteImage src={tile.src} alt={tile.name} />
+          </SpriteWrapper>
+        ))}
+      </SpriteGrid>
+    </div>
   );
 };
 
