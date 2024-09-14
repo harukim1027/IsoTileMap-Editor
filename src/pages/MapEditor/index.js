@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import Tile from "../../components/Tile";
-import Sprites from "../../components/Sprites";
 import {
   EditorContainer,
   MapEditorSection,
   SpritesSection,
 } from "../../styles/MapEditorStyles";
+import Sprites from "../../components/Sprites";
 
 const MapEditor = () => {
   const [selectedTile, setSelectedTile] = useState(null);
@@ -28,9 +28,9 @@ const MapEditor = () => {
       <SpritesSection>
         <Sprites onTileSelect={handleTileSelect} />
       </SpritesSection>
+
       <MapEditorSection>
         <h2>Map Editor</h2>
-
         <Canvas onClick={(e) => handleTilePlace([e.point.x, 0, e.point.z])}>
           <OrbitControls />
           {tiles.map((tile, index) => (
