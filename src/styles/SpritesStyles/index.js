@@ -114,7 +114,6 @@ export const SelectedTileContainer = styled.div`
       width: 50px;
       height: 50px;
     }
-    margin-top: 200px;
   }
 `;
 
