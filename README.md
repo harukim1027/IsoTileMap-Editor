@@ -1,71 +1,65 @@
-# Getting Started with Create React App
+# 타일맵 에디터 (Tilemap Editor)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+이 프로젝트는 **React**와 **React-Three** 라이브러리를 사용하여 제작한 **웹 기반 이소메트릭 게임 타일맵 에디터**입니다. 사용자는 직관적인 인터페이스를 통해 타일맵을 만들고 수정할 수 있으며, 실시간 시각적 피드백, 미니맵 보기, 타일 조작 기능 등을 제공합니다. `styled-components`를 이용한 모듈화된 스타일링을 사용했습니다.
 
-## Available Scripts
+## 목차
 
-In the project directory, you can run:
+- [주요 기능](#주요-기능)
+- [설치 방법](#설치-방법)
+- [사용 방법](#사용-방법)
+- [사용된 기술](#사용된-기술)
 
-### `npm start`
+## 주요 기능
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+1. **타일 렌더링**: `@react-three/fiber` 라이브러리를 이용해 매끄러운 3D 타일 시각화를 제공합니다.
+2. **타일 생성 및 선택**: 기본적으로 하나의 타일이 에디터에 렌더링됩니다. 타일을 클릭하면 선택되며, 선택된 타일의 속성이 화면에 표시됩니다.
+3. **타일 추가**: 상단에 + 버튼을 클릭하면 원하는 사진으로 타일을 추가할 수 있습니다.
+4. **카메라 이동**: 키보드의 방향키로 조작 패널에서 카메라를 이동시킬 수 있습니다.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 설치 방법
 
-### `npm test`
+이 프로젝트를 로컬 환경에서 실행하려면 다음 단계를 따르세요:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. **레포지토리 클론**:
 
-### `npm run build`
+   ```bash
+   git clone https://github.com/yourusername/tilemap-editor.git
+   ```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+2. **프로젝트 디렉터리로 이동**:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+   ```bash
+   cd tilemap-editor
+   ```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+3. **필수 패키지 설치**:
+   Node.js와 npm이 설치되어 있어야 합니다.
 
-### `npm run eject`
+   ```bash
+   npm install
+   ```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+4. **개발 서버 실행**:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+   ```bash
+   npm start
+   ```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+5. **브라우저에서 실행**:
+   브라우저를 열고 `http://localhost:3000`에 접속해 타일맵 에디터를 사용할 수 있습니다.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## 사용 방법
 
-## Learn More
+1. **타일 생성 및 선택**: 기본적으로 하나의 타일이 에디터에 렌더링됩니다. 타일을 클릭하면 선택되며, 선택된 타일의 속성이 화면에 표시됩니다.
+2. **타일 추가**: 상단에 + 버튼을 클릭하면 원하는 사진으로 타일을 추가할 수 있습니다.
+3. **카메라 이동**: 키보드의 방향키로 조작 패널에서 카메라를 이동시킬 수 있습니다.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## 사용된 기술
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-# IsoTileMap-Editor
+- **React**: 사용자 인터페이스를 구축하기 위해 사용.
+- **@react-three/fiber**: 3D 타일 렌더링과 상호작용을 위한 React 기반 three.js 렌더러.
+- **@react-three/drei**: `react-three-fiber`용 유틸리티 컴포넌트.
+- **styled-components**: 컴포넌트 기반 CSS-in-JS 스타일링.
+- **react-toastify**: 실시간 알림 기능을 제공하는 라이브러리.
+- **Node.js**: 개발 환경을 위한 자바스크립트 런타임.
+- **npm**: Node 패키지 매니저.
