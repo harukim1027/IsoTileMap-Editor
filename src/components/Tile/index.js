@@ -29,7 +29,7 @@ const Tile = ({ tile, renderOrder }) => {
     <mesh
       position={tile.position}
       rotation={tile.name === "tile1" ? [0, 0, 0] : [-Math.PI / 20, 0, 0]}
-      renderOrder={renderOrder}>
+      renderOrder={renderOrder || 100}>
       <planeGeometry args={geometryArgs} />
       <meshBasicMaterial map={texture} transparent={true} alphaTest={0.5} />
     </mesh>

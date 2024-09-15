@@ -201,13 +201,13 @@ const MapEditor = () => {
         <OrthographicCamera
           makeDefault
           position={[6, 5, 10]}
-          zoom={50}
+          zoom={80}
           rotation={[cameraRotation?.x, cameraRotation?.y, 0]}
         />
-        <primitive object={new GridHelper(100, 100)} />
+        <primitive object={new GridHelper(1000, 1000)} renderOrder={0} />
         <mesh
           position={[0, 0, 0]}
-          rotation={[-Math.PI / 2, 0, 0]}
+          rotation={[-Math.PI / 2, 1, 0]}
           onPointerDown={handlePlaneDown}
           onPointerMove={handlePlaneMove}
           onPointerUp={handlePlaneUp}>
@@ -215,9 +215,9 @@ const MapEditor = () => {
           <meshBasicMaterial visible={false} />
         </mesh>
         {tiles.map((tile, index) => (
-          <Tile key={index} tile={tile} renderOrder={index + 1} />
+          <Tile key={index} tile={tile} renderOrder={index + 100} />
         ))}
-        <DragSelection /> {/* 드래그 중인 타일 표시 */}
+        <DragSelection />
       </>
     );
   };

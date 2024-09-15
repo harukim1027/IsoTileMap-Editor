@@ -7,13 +7,14 @@ export const EditorContainer = styled.div`
 `;
 
 export const SpritesSection = styled.div`
-  width: 30%;
+  width: 35%;
   background-color: #000000;
-  padding: 0px;
   display: flex;
+
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: flex-start;
+  overflow-y: auto;
   box-shadow: 3px 0px 10px rgba(0, 0, 0, 1);
 `;
 

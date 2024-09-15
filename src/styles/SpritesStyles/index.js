@@ -4,12 +4,12 @@ export const SpriteGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 100px);
   gap: 10px;
-  padding: 20px;
   justify-items: start;
   justify-content: start;
   align-items: start;
   align-content: start;
   height: 100%;
+  width: 100%;
   box-sizing: border-box;
   background-color: #000000;
 `;
